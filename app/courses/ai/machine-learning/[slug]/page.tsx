@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowIcon } from "../../../../components/ArrowIcon";
 import {
@@ -44,9 +43,9 @@ export default async function MachineLearningLessonPage({ params }: LessonPagePr
     <div className="lesson-page">
       <div className="site-container lesson-topbar">
         <nav className="breadcrumb" aria-label="面包屑">
-          <Link href="/">知识解压</Link>
+          <a href="/">知识解压</a>
           <span>/</span>
-          <Link href="/courses/ai/machine-learning">机器学习</Link>
+          <a href="/courses/ai/machine-learning">机器学习</a>
           <span>/</span>
           <span>第 {lesson.number} 课</span>
         </nav>
@@ -57,13 +56,13 @@ export default async function MachineLearningLessonPage({ params }: LessonPagePr
 
       <div className="site-container lesson-layout">
         <aside className="lesson-sidebar">
-          <Link className="sidebar-course" href="/courses/ai/machine-learning">
+          <a className="sidebar-course" href="/courses/ai/machine-learning">
             <span>AI · 入门课</span>
             <strong>{machineLearningCourse.title}</strong>
-          </Link>
+          </a>
           <nav aria-label="机器学习课程目录">
             {lessons.map((item) => (
-              <Link
+              <a
                 aria-current={item.slug === lesson.slug ? "page" : undefined}
                 className={item.slug === lesson.slug ? "active" : ""}
                 href={`/courses/ai/machine-learning/${item.slug}`}
@@ -71,7 +70,7 @@ export default async function MachineLearningLessonPage({ params }: LessonPagePr
               >
                 <span>{item.number.toString().padStart(2, "0")}</span>
                 {item.title}
-              </Link>
+              </a>
             ))}
           </nav>
         </aside>
@@ -162,28 +161,28 @@ export default async function MachineLearningLessonPage({ params }: LessonPagePr
 
           <nav className="lesson-nav" aria-label="课程前后导航">
             {previousLesson ? (
-              <Link href={`/courses/ai/machine-learning/${previousLesson.slug}`}>
+              <a href={`/courses/ai/machine-learning/${previousLesson.slug}`}>
                 <span>上一课</span>
                 <strong>{previousLesson.title}</strong>
-              </Link>
+              </a>
             ) : (
-              <Link href="/courses/ai/machine-learning">
+              <a href="/courses/ai/machine-learning">
                 <span>返回</span>
                 <strong>课程目录</strong>
-              </Link>
+              </a>
             )}
             {nextLesson ? (
-              <Link className="next" href={`/courses/ai/machine-learning/${nextLesson.slug}`}>
+              <a className="next" href={`/courses/ai/machine-learning/${nextLesson.slug}`}>
                 <span>下一课</span>
                 <strong>{nextLesson.title}</strong>
                 <ArrowIcon />
-              </Link>
+              </a>
             ) : (
-              <Link className="next" href="/courses/ai/machine-learning">
+              <a className="next" href="/courses/ai/machine-learning">
                 <span>完成</span>
                 <strong>返回课程目录</strong>
                 <ArrowIcon />
-              </Link>
+              </a>
             )}
           </nav>
         </article>

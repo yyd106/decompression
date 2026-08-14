@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ArrowIcon } from "./components/ArrowIcon";
 import { courseStats, disciplines } from "../lib/site-data";
 
@@ -76,13 +75,13 @@ export default function Home() {
               AI 可以随时给出答案，却不会自动把答案变成你的理解。知识解压从真实问题出发，先建立一个能解释现象的世界模型，再逐步展开概念、机制与边界。
             </p>
             <div className="hero-actions">
-              <Link className="button button-primary" href="/courses/ai/machine-learning">
+              <a className="button button-primary" href="/courses/ai/machine-learning">
                 开始学习机器学习
                 <ArrowIcon />
-              </Link>
-              <Link className="button button-quiet" href="/#fields">
+              </a>
+              <a className="button button-quiet" href="/#fields">
                 查看全部课程
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -209,13 +208,13 @@ export default function Home() {
               );
 
               return discipline.active ? (
-                <Link
+                <a
                   className="discipline-link"
                   href="/courses/ai/machine-learning"
                   key={discipline.slug}
                 >
                   {card}
-                </Link>
+                </a>
               ) : (
                 <div className="discipline-link" key={discipline.slug}>
                   {card}
@@ -237,10 +236,10 @@ export default function Home() {
             <p>
               课程从熟悉现象出发，依次展开样本、特征、训练、误差、评估与泛化。你不需要先会写代码或推导复杂公式。
             </p>
-            <Link className="text-link" href="/courses/ai/machine-learning">
+            <a className="text-link" href="/courses/ai/machine-learning">
               进入《机器学习入门》
               <ArrowIcon />
-            </Link>
+            </a>
           </div>
           <div className="feature-outcomes">
             <p className="outcomes-label">学完以后，你应该能够</p>

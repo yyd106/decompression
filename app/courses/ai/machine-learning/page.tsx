@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ArrowIcon } from "../../../components/ArrowIcon";
 import {
   courseModules,
@@ -18,9 +17,9 @@ export default function MachineLearningCoursePage() {
       <section className="course-hero">
         <div className="site-container">
           <nav className="breadcrumb" aria-label="面包屑">
-            <Link href="/">知识解压</Link>
+            <a href="/">知识解压</a>
             <span>/</span>
-            <Link href="/#fields">AI</Link>
+            <a href="/#fields">AI</a>
             <span>/</span>
             <span>机器学习</span>
           </nav>
@@ -82,7 +81,7 @@ export default function MachineLearningCoursePage() {
                   <ol className="lesson-list" start={module.range[0]}>
                     {moduleLessons.map((lesson) => (
                       <li key={lesson.slug}>
-                        <Link href={`/courses/ai/machine-learning/${lesson.slug}`}>
+                        <a href={`/courses/ai/machine-learning/${lesson.slug}`}>
                           <span className="lesson-number">
                             {lesson.number.toString().padStart(2, "0")}
                           </span>
@@ -92,7 +91,7 @@ export default function MachineLearningCoursePage() {
                           </span>
                           <span className="lesson-duration">{lesson.duration}</span>
                           <ArrowIcon />
-                        </Link>
+                        </a>
                       </li>
                     ))}
                   </ol>
@@ -112,13 +111,13 @@ export default function MachineLearningCoursePage() {
           <div>
             <p>{machineLearningCourse.project}</p>
             {lessons[0] && (
-              <Link
+              <a
                 className="button button-primary"
                 href={`/courses/ai/machine-learning/${lessons[0].slug}`}
               >
                 开始第一课
                 <ArrowIcon />
-              </Link>
+              </a>
             )}
           </div>
         </div>

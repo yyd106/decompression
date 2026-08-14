@@ -23,6 +23,10 @@ const eslintConfig = defineConfig([
   jsxA11y.flatConfigs.recommended,
   next.configs["core-web-vitals"],
   {
+    rules: {
+      // Full document navigation keeps password-protected course routes reliable.
+      "@next/next/no-html-link-for-pages": "off",
+    },
     languageOptions: {
       globals: {
         ...globals.browser,

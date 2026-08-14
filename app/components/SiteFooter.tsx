@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export function SiteFooter() {
   return (
     <footer className="site-footer">
@@ -9,9 +7,9 @@ export function SiteFooter() {
           <p className="footer-note">先建立模型，再吸收细节。</p>
         </div>
         <div className="footer-links">
-          <Link href="/#why">学习主张</Link>
-          <Link href="/#fields">五个板块</Link>
-          <Link href="/courses/ai/machine-learning">机器学习</Link>
+          <a href="/#why">学习主张</a>
+          <a href="/#fields">五个板块</a>
+          <a href="/courses/ai/machine-learning">机器学习</a>
         </div>
         <p className="footer-year">AI 时代的学习实验 · 2026</p>
       </div>
