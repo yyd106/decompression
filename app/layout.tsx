@@ -24,20 +24,20 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s｜知识解压",
     },
     description:
-      "先建立一个能解释现象的世界模型，再逐步展开概念、机制与边界。",
+      "先用真实案例跑通机制，再让概念逐个出现，并用新案例检验理解。",
     icons: {
       icon: "/favicon.svg",
       shortcut: "/favicon.svg",
     },
     openGraph: {
       title: "知识解压：AI 时代的学习方式",
-      description: "先建立模型，再展开知识。",
+      description: "先跑通一个真实问题，再展开一门学科。",
       type: "website",
       locale: "zh_CN",
       url: origin,
       images: [
         {
-          url: `${origin}/og.png`,
+          url: `${origin}/og-v2.png`,
           width: 1200,
           height: 630,
           alt: "知识解压：AI 时代的学习方式",
@@ -47,8 +47,8 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title: "知识解压：AI 时代的学习方式",
-      description: "先建立模型，再展开知识。",
-      images: [`${origin}/og.png`],
+      description: "先跑通一个真实问题，再展开一门学科。",
+      images: [`${origin}/og-v2.png`],
     },
   };
 }

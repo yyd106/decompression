@@ -13,7 +13,7 @@ export function SiteHeader() {
         </a>
         <nav className="main-nav" aria-label="主导航">
           <a href="/#why">为什么</a>
-          <a href="/#method">怎么学</a>
+          <a href="/#method">如何解压</a>
           <a href="/#fields">课程地图</a>
         </nav>
         <a className="header-cta" href="/courses/ai/machine-learning">

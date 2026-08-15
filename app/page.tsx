@@ -1,59 +1,81 @@
 import { ArrowIcon } from "./components/ArrowIcon";
 import { courseStats, disciplines } from "../lib/site-data";
 
+const workedExample = [
+  {
+    index: "01",
+    title: "一封邮件被标记",
+    body: "用户把一封邮件标成垃圾邮件，这条带有明确答案的记录就成为样本；其中的答案叫作标签。",
+  },
+  {
+    index: "02",
+    title: "模型读取可用信息",
+    body: "发件人、文字和链接等信息会影响判断。机器学习把这些可供模型使用的信息叫作特征。",
+  },
+  {
+    index: "03",
+    title: "预测与答案比较",
+    body: "模型先作出预测，再把预测与标签比较。两者之间的差距形成误差，训练据此调整模型。",
+  },
+  {
+    index: "04",
+    title: "换一批新邮件检验",
+    body: "旧邮件上表现好还不够。只有面对训练时没见过的邮件仍能判断，模型才可能学到了可迁移的规律。",
+  },
+];
+
 const argumentsForDecompression = [
   {
     index: "01",
-    title: "过去的载体，首先要保存知识",
+    title: "固定内容只能预设一条主要路径",
     paragraphs: [
-      "过去，学习者首先面对的是“资料在哪里”。知识分散在书籍、论文和专家经验里，出版一本教材的成本又很高。作者只能预先选定一条顺序，把一个领域尽可能完整地装进固定篇幅。这种方式保存了知识，也方便查阅，并不是错误的设计。",
-      "问题出在学习的起点。一本书无法知道此刻的读者卡在哪里，也无法根据一次误解立刻换一个例子。初学者因此容易先遇到几十个陌生名词，却还不知道这些名词共同在解决什么问题。资料已经拿到手，理解它们的地图仍然缺席。",
+      "一本书需要把知识保存成稳定版本，作者必须提前决定从哪里开始、哪些概念先出现。这种结构适合保存、论证和查阅，也记录了作者完整的思考过程。",
+      "学习者的起点却不同。甲已经理解的前提，乙可能从未接触；固定文本无法知道读者卡在哪一步，也无法当场换一种解释。",
     ],
   },
   {
     index: "02",
-    title: "AI 增加了解释，却不会自动生成理解",
+    title: "领域越大，初学者越难先看见主线",
     paragraphs: [
-      "AI 显著降低了寻找、改写和追问知识的成本。你可以要求它解释术语、比较方案、换一个生活案例，或者根据自己的回答继续追问。过去需要翻阅多本书才能拼出的材料，现在可以在一次对话里快速聚合。",
-      "但“随时生成解释”不等于“已经形成理解”。如果问题本身没有结构，AI 也可能继续生成一串看似完整的目录。它解决了知识供给和互动速度，却没有自动解决知识怎样组织、怎样验证、怎样真正被使用。",
+      "一个领域持续发展，会出现更多概念、工具、分支和例外。不同作者又会按照各自的目标重新安排它们，书架越来越完整，进入领域的路径也越来越多。",
+      "初学者常常要先读过大量内容，才慢慢发现哪些问题贯穿全局。此时缺少的不是下一份资料，而是一套能让细节找到位置的结构。",
     ],
   },
   {
     index: "03",
-    title: "稳定骨架与动态解释，现在可以同时存在",
+    title: "AI 让解释可以分叉，但分叉仍然需要骨架",
     paragraphs: [
-      "知识解压需要两部分：一套稳定的课程骨架，以及能够围绕骨架动态展开的解释。课程先给出核心问题、参与者、关键变量和运作机制，再由 AI 根据学习者的疑问补充例子、对比和练习。",
-      "这让课程不必在“过于简略”和“面面俱到”之间二选一。主干保持一致，解释可以随读者调整，直到抽象判断落到可观察的案例。AI 在这里不是知识权威，而是解说员和陪练。",
+      "生成式 AI 可以根据一次追问重新表述概念、补充案例或调整解释深度。过去必须由作者提前写好的解释分支，现在可以在学习发生时生成。",
+      "但更多解释不等于可靠结构。课程仍需确定核心问题、关键变量、事实边界和检验方式；AI 再围绕这套骨架调整粒度，才不会把一次追问变成另一轮知识堆叠。",
     ],
   },
-  {
-    index: "04",
-    title: "能迁移、能被证伪，才算真正解压",
-    paragraphs: [
-      "一句漂亮总结只能让人点头，一个有效模型应该让人做出以前做不到的事：解释主要案例，推出后续概念为什么出现，判断一个没见过的新例子，并说清自己的适用条件。",
-      "如果一句概括容不下重要事实，我们就修改它，而不是把事实硬塞进去。如果学习者只能复述句子，却不能用它分析案例，这门课还没有完成解压。课程的终点，是能借助模型提出问题、预测结果，再根据反馈修正理解。",
-    ],
-  },
+];
+
+const decompressionChecks = [
+  ["覆盖", "核心案例能否放回同一套模型中解释？"],
+  ["推导", "后续概念为什么出现，能否从模型中推出？"],
+  ["迁移", "面对没见过的新案例，能否据此作出判断？"],
+  ["边界", "判断失败时，能否指出缺少的条件？"],
 ];
 
 const learningMethod = [
   {
     index: "1",
-    title: "世界模型",
-    subtitle: "先看见系统怎样运转",
-    body: "从一个能观察到的现象开始，找出参与者、目标、约束与反馈，再用完整案例跑通机制。你先获得一张足以辨认方向的地图。",
+    title: "找到压缩模型",
+    subtitle: "先跑通一个完整案例",
+    body: "从读者见过的问题开始，明确谁参与、输入什么、希望得到什么结果，以及反馈怎样回到系统。模型不是一句口号，而是这条机制中反复出现的关系。",
   },
   {
     index: "2",
-    title: "知识解压",
-    subtitle: "让概念从问题中出现",
-    body: "每个术语都作为具体问题的答案出现：为什么需要它，它改变了哪一步，它和相邻概念有什么不同。细节因此有位置可以挂载。",
+    title: "建立核心变量",
+    subtitle: "让概念在需要时出现",
+    body: "只有当机制需要回答一个新问题时，才引入对应术语。每个概念都要说明它负责哪一步、会改变什么结果，以及和相邻概念有什么区别。",
   },
   {
     index: "3",
-    title: "实践验证",
-    subtitle: "用新案例检验并修正",
-    body: "改变案例条件，解释结果为什么变化，再把模型用于没见过的对象。当模型解释不了事实时，标出例外或修正原有判断。",
+    title: "从模型展开知识",
+    subtitle: "换条件重新检验",
+    body: "改变输入、目标或约束，再判断结果为什么变化。解释中断时，AI 可以换例子或缩小步长；模型解释不了新事实时，就标出边界或修正原有判断。",
   },
 ];
 
@@ -65,14 +87,12 @@ export default function Home() {
           <div className="hero-copy">
             <p className="eyebrow">知识解压 · AI 时代学习方式的革命</p>
             <h1>
-              先看懂一个领域
+              先跑通一个真实问题，
               <br />
-              <em>怎样运转</em>，再记住
-              <br />
-              知识叫什么。
+              再展开<em>一门学科</em>。
             </h1>
             <p className="hero-lead">
-              AI 可以随时给出答案，却不会自动把答案变成你的理解。知识解压从真实问题出发，先建立一个能解释现象的世界模型，再逐步展开概念、机制与边界。
+              固定内容必须预先安排同一条主要路径，学习者却有不同的起点和疑问。知识解压用稳定骨架守住方向，再让 AI 围绕你的问题调整解释的粒度与节奏。
             </p>
             <div className="hero-actions">
               <a className="button button-primary" href="/courses/ai/machine-learning">
@@ -80,26 +100,26 @@ export default function Home() {
                 <ArrowIcon />
               </a>
               <a className="button button-quiet" href="/#fields">
-                查看全部课程
+                查看五个学习板块
               </a>
             </div>
           </div>
 
           <aside className="hero-note" aria-label="理解的三个检验问题">
-            <p className="note-label">不是更短，而是更能生成</p>
-            <h2>你真的理解了吗？</h2>
+            <p className="note-label">学完以后，检查三件事</p>
+            <h2>知识真的变成你的了吗？</h2>
             <ol>
               <li>
                 <span>01</span>
-                能解释一个熟悉现象吗？
+                能复原事情怎样发生吗？
               </li>
               <li>
                 <span>02</span>
-                能判断一个新案例吗？
+                能判断一个没见过的案例吗？
               </li>
               <li>
                 <span>03</span>
-                能说清模型何时失效吗？
+                能说清原有判断何时失效吗？
               </li>
             </ol>
             <p className="note-foot">三项都能做到，知识才从“见过”变成“会用”。</p>
@@ -112,7 +132,41 @@ export default function Home() {
               <span>{stat.label}</span>
             </div>
           ))}
-          <p>从一门真正展开的机器学习入门课开始。</p>
+          <p>目前已完整展开：机器学习入门 · 16 节。</p>
+        </div>
+      </section>
+
+      <section className="example-section section-pad" id="example">
+        <div className="site-container">
+          <div className="section-heading split-heading example-heading">
+            <div>
+              <p className="eyebrow">A WORKED EXAMPLE</p>
+              <h2>先看一次知识<br />怎样被解开。</h2>
+            </div>
+            <p>
+              为什么“样本、标签、特征、训练、泛化”不是五个分散的术语？把垃圾邮件过滤器完整跑一遍，概念会在机制需要它们时依次出现。
+            </p>
+          </div>
+
+          <div className="example-flow">
+            {workedExample.map((step) => (
+              <article className="example-step" key={step.index}>
+                <span>{step.index}</span>
+                <h3>{step.title}</h3>
+                <p>{step.body}</p>
+              </article>
+            ))}
+          </div>
+
+          <div className="example-conclusion">
+            <p className="example-label">这次解压保留了什么？</p>
+            <p>
+              它没有把术语换成更短的定义，而是恢复了术语之间的因果关系：为什么需要下一个概念，它改变了哪一步，又该怎样检验。
+            </p>
+            <p>
+              如果模型只在旧邮件上表现很好，面对新邮件却频繁出错，我们还要引入“过拟合”。新概念不是目录里的下一项，而是旧模型解释不了事实后出现的新问题。
+            </p>
+          </div>
         </div>
       </section>
 
@@ -121,10 +175,10 @@ export default function Home() {
           <div className="section-heading split-heading">
             <div>
               <p className="eyebrow">WHY NOW</p>
-              <h2>为什么现在需要<br />知识解压？</h2>
+              <h2>为什么过去容易<br />先给目录，后给地图？</h2>
             </div>
             <p>
-              信息稀缺时，重要的是把知识保存下来。信息充足后，更稀缺的是一套能组织、调用和检验知识的结构。
+              问题不在于书籍不够好，而在于固定内容无法观察每位读者的理解状态。AI 改变了解释的可变性；稳定的课程骨架负责让变化不偏离主线。
             </p>
           </div>
 
@@ -144,10 +198,18 @@ export default function Home() {
 
           <div className="decompression-definition">
             <p className="definition-kicker">知识解压 ≠ 摘要</p>
-            <p className="definition-small">摘要把 100 页缩成 10 页。</p>
+            <p className="definition-small">摘要主要减少内容长度；知识解压保留生成关系。</p>
             <p className="definition-large">
-              知识解压找到 100 页背后的<span>生成模型</span>，让你能继续理解第 101 页。
+              先用少数实体、变量和因果关系解释核心案例，再从这套关系<span>推出概念，并用新案例检查它是否成立。</span>
             </p>
+            <div className="definition-checks" aria-label="知识解压的四项检验">
+              {decompressionChecks.map(([title, description]) => (
+                <div key={title}>
+                  <strong>{title}</strong>
+                  <p>{description}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -156,8 +218,8 @@ export default function Home() {
         <div className="site-container">
           <div className="section-heading method-heading">
             <p className="eyebrow">THE METHOD</p>
-            <h2>一门课，完成三次认知转换</h2>
-            <p>模型负责定方向，概念负责补结构，实践负责纠错。</p>
+            <h2>一门课怎样完成压缩与解压？</h2>
+            <p>不是只记住一句强断言，而是完成三个可以观察、可以返工的动作。</p>
           </div>
           <div className="method-grid">
             {learningMethod.map((step) => (
@@ -177,10 +239,10 @@ export default function Home() {
           <div className="section-heading split-heading fields-heading">
             <div>
               <p className="eyebrow">COURSE MAP</p>
-              <h2>五个板块，<br />五种理解世界的入口</h2>
+              <h2>从你此刻最想解释的<br />问题开始。</h2>
             </div>
             <p>
-              每个板块先回答一个根问题，再展开为可以单独进入的入门课。你不必按顺序学完，只需从此刻最想解释的问题开始。
+              每张卡不试图用一句话讲完整个领域，而是给出第一组值得追问的问题。进入课程后，再沿着变量、机制和案例逐层展开。
             </p>
           </div>
 
@@ -229,12 +291,12 @@ export default function Home() {
         <div className="site-container feature-grid">
           <div className="feature-copy">
             <p className="eyebrow">FIRST COURSE · 16 LESSONS</p>
-            <h2>从机器学习开始，第一次完整体验知识解压。</h2>
+            <h2>把这条因果链，继续展开成一门机器学习入门课。</h2>
             <p>
-              当相册认出猫，或平台判断一笔交易是否异常，机器不是照着人写好的规则逐条执行。它从许多案例中调整模型，再把规律用于没见过的数据。
+              首页只跑通了垃圾邮件过滤器的最小机制。完整课程会依次展开任务、样本、特征、训练、误差、评估与泛化，再处理过拟合、数据泄漏和类别不平衡。
             </p>
             <p>
-              课程从熟悉现象出发，依次展开样本、特征、训练、误差、评估与泛化。你不需要先会写代码或推导复杂公式。
+              后半程还会比较监督学习、无监督学习和强化学习。你不需要先会写代码或推导复杂公式，只需基础算术、百分比和表格阅读。
             </p>
             <a className="text-link" href="/courses/ai/machine-learning">
               进入《机器学习入门》

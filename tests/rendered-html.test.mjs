@@ -86,7 +86,12 @@ test("renders the finished knowledge decompression homepage", async () => {
 
   const html = await response.text();
   assert.match(html, /知识解压/);
-  assert.match(html, /为什么现在需要/);
+  assert.match(html, /先跑通一个真实问题/);
+  assert.match(html, /固定内容只能预设一条主要路径/);
+  assert.match(html, /id="example"/);
+  assert.match(html, /id="why"/);
+  assert.match(html, /id="method"/);
+  assert.match(html, /id="fields"/);
   assert.match(html, /机器学习/);
   assert.match(html, /AI/);
   assert.match(html, /金融/);
@@ -94,6 +99,7 @@ test("renders the finished knowledge decompression homepage", async () => {
   assert.match(html, /人文/);
   assert.match(html, /语言/);
   assert.match(html, /href="\/courses\/ai\/machine-learning"/);
+  assert.doesNotMatch(html, /世界模型|三次认知转换|实践验证/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
 

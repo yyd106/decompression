@@ -402,6 +402,69 @@ svg {
   line-height: 1.85;
 }
 
+.example-section {
+  border-bottom: 1px solid var(--line-strong);
+}
+
+.example-heading {
+  margin-bottom: 72px;
+}
+
+.example-flow {
+  display: grid;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.example-step {
+  min-height: 330px;
+  padding: 32px 28px 36px;
+  border-right: 1px solid var(--line-strong);
+}
+
+.example-step:last-child {
+  border-right: 0;
+}
+
+.example-step > span {
+  color: var(--vermilion);
+  font-family: Georgia, serif;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.example-step h3 {
+  margin: 64px 0 20px;
+  font-family: var(--serif);
+  font-size: 27px;
+  font-weight: 620;
+  line-height: 1.4;
+}
+
+.example-step p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.example-conclusion {
+  display: grid;
+  margin-top: 34px;
+  padding: 30px 32px;
+  background: var(--sage-light);
+  grid-template-columns: 0.55fr 1fr 1fr;
+  gap: 38px;
+}
+
+.example-conclusion > p:not(.example-label) {
+  margin: 0;
+  color: #365144;
+  font-size: 14px;
+  line-height: 1.9;
+}
+
 .argument-section {
   background: var(--paper-soft);
 }
@@ -488,6 +551,33 @@ svg {
 
 .definition-large span {
   color: #ef836a;
+}
+
+.definition-checks {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  margin-top: 48px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.definition-checks > div {
+  padding: 24px 22px 0 0;
+}
+
+.definition-checks strong {
+  color: #ef836a;
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 600;
+}
+
+.definition-checks p {
+  margin: 8px 0 0;
+  color: #b8c3bb;
+  font-size: 13px;
+  line-height: 1.75;
 }
 
 .method-section {
@@ -1525,6 +1615,26 @@ svg {
     gap: 32px;
   }
 
+  .example-flow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .example-step:nth-child(2) {
+    border-right: 0;
+  }
+
+  .example-step:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .example-conclusion {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .example-conclusion .example-label {
+    grid-column: 1 / -1;
+  }
+
   .argument-item {
     grid-template-columns: 50px 1fr;
   }
@@ -1535,6 +1645,10 @@ svg {
 
   .method-grid {
     grid-template-columns: 1fr;
+  }
+
+  .definition-checks {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .method-card {
@@ -1732,6 +1846,35 @@ svg {
 
   .split-heading {
     margin-bottom: 54px;
+  }
+
+  .example-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .example-step,
+  .example-step:nth-child(2) {
+    min-height: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .example-step:last-child {
+    border-bottom: 0;
+  }
+
+  .example-step h3 {
+    margin-top: 34px;
+  }
+
+  .example-conclusion,
+  .definition-checks {
+    grid-template-columns: 1fr;
+  }
+
+  .example-conclusion {
+    padding: 26px 24px;
+    gap: 22px;
   }
 
   .argument-item {

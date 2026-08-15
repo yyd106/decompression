@@ -4,7 +4,7 @@ export function SiteFooter() {
       <div className="site-container footer-inner">
         <div>
           <p className="footer-name">知识解压</p>
-          <p className="footer-note">先建立模型，再吸收细节。</p>
+          <p className="footer-note">从真实问题出发，把概念放回机制。</p>
         </div>
         <div className="footer-links">
           <a href="/#why">学习主张</a>
