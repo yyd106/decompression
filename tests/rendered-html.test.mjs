@@ -98,7 +98,9 @@ test("renders the finished knowledge decompression homepage", async () => {
   assert.match(html, /艺术/);
   assert.match(html, /人文/);
   assert.match(html, /语言/);
+  assert.match(html, /href="\/courses\/ai"/);
   assert.match(html, /href="\/courses\/ai\/machine-learning"/);
+  assert.match(html, /机器学习与深度学习 · 共 30 节/);
   assert.doesNotMatch(html, /世界模型|三次认知转换|实践验证/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
@@ -117,5 +119,51 @@ test("renders the machine learning course and a lesson", async () => {
   assert.equal(lessonResponse.status, 200);
   assert.match(lessonHtml, /跟着案例走一遍/);
   assert.match(lessonHtml, /轮到你判断/);
-  assert.match(lessonHtml, /经验形成模型/);
+  assert.match(lessonHtml, /记录形成模型/);
+
+  const finalLessonResponse = await render(
+    "/courses/ai/machine-learning/16-reinforcement-learning",
+  );
+  const finalLessonHtml = await finalLessonResponse.text();
+  assert.equal(finalLessonResponse.status, 200);
+  assert.match(finalLessonHtml, /href="\/courses\/ai\/deep-learning"/);
+  assert.match(finalLessonHtml, /继续学习深度学习/);
+});
+
+test("renders the AI course map with two complete tutorials", async () => {
+  const response = await render("/courses/ai");
+  const html = await response.text();
+
+  assert.equal(response.status, 200);
+  assert.match(html, /四个问题，逐层深入/);
+  assert.match(html, /href="\/courses\/ai\/machine-learning"/);
+  assert.match(html, /href="\/courses\/ai\/deep-learning"/);
+  assert.match(html, /大语言模型/);
+  assert.match(html, /AI Agent/);
+  assert.match(html, /完整教程/);
+  assert.match(html, /大纲就绪/);
+});
+
+test("renders the deep learning course and its first, middle, and last lessons", async () => {
+  const courseResponse = await render("/courses/ai/deep-learning");
+  const courseHtml = await courseResponse.text();
+  assert.equal(courseResponse.status, 200);
+  assert.match(courseHtml, /建立表示链/);
+  assert.match(courseHtml, /同一只猫换个位置/);
+  assert.match(courseHtml, /什么时候复用已有模型/);
+
+  const lessonPaths = [
+    "/courses/ai/deep-learning/01-pattern-after-moving",
+    "/courses/ai/deep-learning/08-gradient-direction",
+    "/courses/ai/deep-learning/14-transfer-learning",
+  ];
+
+  for (const lessonPath of lessonPaths) {
+    const lessonResponse = await render(lessonPath);
+    const lessonHtml = await lessonResponse.text();
+    assert.equal(lessonResponse.status, 200);
+    assert.match(lessonHtml, /跟着案例走一遍/);
+    assert.match(lessonHtml, /轮到你判断/);
+    assert.match(lessonHtml, /本节词汇/);
+  }
 });

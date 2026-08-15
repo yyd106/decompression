@@ -2,22 +2,22 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { LessonReader } from "../../../../components/LessonReader";
 import {
-  getLesson,
-  lessons,
-  machineLearningCourse,
-} from "../../../../../lib/machine-learning";
+  deepLearningCourse,
+  deepLearningLessons,
+  getDeepLearningLesson,
+} from "../../../../../lib/deep-learning";
 
 type LessonPageProps = {
   params: Promise<{ slug: string }>;
 };
 
 export function generateStaticParams() {
-  return lessons.map((lesson) => ({ slug: lesson.slug }));
+  return deepLearningLessons.map((lesson) => ({ slug: lesson.slug }));
 }
 
 export async function generateMetadata({ params }: LessonPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const lesson = getLesson(slug);
+  const lesson = getDeepLearningLesson(slug);
 
   if (!lesson) {
     return { title: "课程未找到" };
@@ -29,9 +29,9 @@ export async function generateMetadata({ params }: LessonPageProps): Promise<Met
   };
 }
 
-export default async function MachineLearningLessonPage({ params }: LessonPageProps) {
+export default async function DeepLearningLessonPage({ params }: LessonPageProps) {
   const { slug } = await params;
-  const lesson = getLesson(slug);
+  const lesson = getDeepLearningLesson(slug);
 
   if (!lesson) notFound();
 
@@ -40,13 +40,13 @@ export default async function MachineLearningLessonPage({ params }: LessonPagePr
       areaHref="/courses/ai"
       areaLabel="AI"
       completionLink={{
-        href: "/courses/ai/deep-learning",
-        overline: "下一门课",
-        label: "继续学习深度学习",
+        href: "/courses/ai",
+        overline: "完成",
+        label: "返回 AI 课程地图",
       }}
-      course={machineLearningCourse}
+      course={deepLearningCourse}
       lesson={lesson}
-      lessons={lessons}
+      lessons={deepLearningLessons}
     />
   );
 }

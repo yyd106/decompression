@@ -16,8 +16,8 @@ export function SiteHeader() {
           <a href="/#method">如何解压</a>
           <a href="/#fields">课程地图</a>
         </nav>
-        <a className="header-cta" href="/courses/ai/machine-learning">
-          开始机器学习
+        <a className="header-cta" href="/courses/ai">
+          进入 AI 课程
           <span aria-hidden="true">↗</span>
         </a>
       </div>
