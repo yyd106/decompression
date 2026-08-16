@@ -235,20 +235,42 @@ test("renders the course catalog and all five discipline outlines", async () => 
   assert.match(catalogHtml, /18 门入门课程/);
 
   const disciplineSpecs = [
-    ["ai", "AI", 4],
-    ["finance", "金融", 4],
-    ["art", "艺术", 4],
-    ["humanities", "人文", 3],
-    ["language", "语言", 3],
+    ["ai", "AI", 4, "面对当前情况，机器凭什么决定下一步？"],
+    [
+      "finance",
+      "金融",
+      4,
+      "人们怎样把资源交给别人或带到未来，并说清谁得到什么、谁承担损失？",
+    ],
+    [
+      "art",
+      "艺术",
+      4,
+      "怎样用线索，引导别人的注意、理解和行动？",
+    ],
+    [
+      "humanities",
+      "人文",
+      3,
+      "关于人和社会的说法，怎样才算站得住？",
+    ],
+    [
+      "language",
+      "语言",
+      3,
+      "人怎样用声音和文字，让别人重建自己脑中的意思？",
+    ],
   ];
 
-  for (const [slug, title, courseCount] of disciplineSpecs) {
+  for (const [slug, title, courseCount, question] of disciplineSpecs) {
     assert.match(catalogHtml, new RegExp(`href="/courses/${slug}"`));
 
     const response = await render(`/courses/${slug}`);
     const html = await response.text();
     assert.equal(response.status, 200);
     assert.match(html, new RegExp(title));
+    assert.ok(html.includes(question));
+    assert.match(html, /最小回答/);
     assert.match(html, new RegExp(`${courseCount}(?:<!-- -->)? 门课程`));
 
     const courseLinks = Array.from(
@@ -269,7 +291,9 @@ test("renders the AI course map with three complete tutorials and one outline", 
   assert.match(html, /href="\/courses\/ai\/large-language-models"/);
   assert.match(html, /href="\/courses\/ai\/ai-agents"/);
   assert.match(html, /大语言模型/);
-  assert.match(html, /词元/);
+  assert.match(html, /面对当前情况，机器凭什么决定下一步？/);
+  assert.match(html, /最小回答/);
+  assert.match(html, /同一个问题逐步加入复杂条件/);
   assert.doesNotMatch(html, /\bToken\b/);
   assert.match(html, /AI Agent/);
   assert.match(html, /4(?:<!-- -->)? 门课程/);

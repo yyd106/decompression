@@ -34,7 +34,7 @@ export function DisciplineOverview({
               <p className="catalog-field-question">{discipline.question}</p>
             </header>
             <aside className="catalog-field-model">
-              <p className="catalog-label">领域主线</p>
+              <p className="catalog-label">最小回答</p>
               <p>{discipline.model}</p>
               <p className="catalog-field-status">
                 {courses.length} 门课程
@@ -51,7 +51,7 @@ export function DisciplineOverview({
         <div className="site-container catalog-field-intro-grid">
           <div>
             <p className="eyebrow">WHY THIS FIELD</p>
-            <h2>这个领域究竟在研究什么？</h2>
+            <h2>这个基础问题怎样逐步展开？</h2>
           </div>
           <div className="catalog-field-intro-copy">
             {copy.introduction.map((paragraph) => (

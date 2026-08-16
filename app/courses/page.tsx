@@ -22,7 +22,7 @@ export default function CourseCatalogPage() {
             <p className="eyebrow">COURSE CATALOG · 5 FIELDS</p>
             <h1>从一个想弄明白的问题，进入一门学科。</h1>
             <p>
-              这里汇集 5 个领域、18 门入门课程和 265 个章节入口。每个领域先说明它反复研究哪类问题，再把问题分成可以逐门进入的课程。
+              这里汇集 5 个领域、18 门入门课程和 265 个章节入口。每个领域先给出一个能生长出全部课程的基础问题，再把最小回答逐门扩展到更复杂的现实情况。
             </p>
           </div>
         </div>
