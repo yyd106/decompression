@@ -14,10 +14,10 @@ export function SiteHeader() {
         <nav className="main-nav" aria-label="主导航">
           <a href="/#why">为什么</a>
           <a href="/#method">如何解压</a>
-          <a href="/#fields">课程地图</a>
+          <a href="/courses">课程地图</a>
         </nav>
-        <a className="header-cta" href="/courses/ai">
-          进入 AI 课程
+        <a className="header-cta" href="/courses">
+          查看全部课程
           <span aria-hidden="true">↗</span>
         </a>
       </div>

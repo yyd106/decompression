@@ -3,6 +3,28 @@ import test from "node:test";
 
 const testPassword = "test-password";
 
+const workerUrl = new URL("../dist/server/index.js", import.meta.url);
+workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
+const workerPromise = import(workerUrl.href).then((module) => module.default);
+
+const outlineCourseSpecs = [
+  ["ai", "ai-agents", 14],
+  ["finance", "money", 14],
+  ["finance", "payment-systems", 16],
+  ["finance", "investing", 16],
+  ["finance", "financial-institutions", 14],
+  ["art", "music", 14],
+  ["art", "visual-art", 14],
+  ["art", "film", 14],
+  ["art", "design", 14],
+  ["humanities", "psychology", 16],
+  ["humanities", "philosophy", 15],
+  ["humanities", "history", 14],
+  ["language", "english", 16],
+  ["language", "chinese", 14],
+  ["language", "writing", 15],
+];
+
 async function accessCookie() {
   const bytes = new TextEncoder().encode(
     `knowledge-decompression:${testPassword}`,
@@ -15,9 +37,7 @@ async function accessCookie() {
 }
 
 async function render(pathname = "/", options = {}) {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
+  const worker = await workerPromise;
   const unlocked = options.unlocked ?? true;
   const headers = new Headers({ accept: "text/html" });
   if (unlocked) headers.set("cookie", await accessCookie());
@@ -99,6 +119,10 @@ test("renders the finished knowledge decompression homepage", async () => {
   assert.match(html, /人文/);
   assert.match(html, /语言/);
   assert.match(html, /href="\/courses\/ai"/);
+  assert.match(html, /href="\/courses\/finance"/);
+  assert.match(html, /href="\/courses\/art"/);
+  assert.match(html, /href="\/courses\/humanities"/);
+  assert.match(html, /href="\/courses\/language"/);
   assert.match(html, /href="\/courses\/ai\/machine-learning"/);
   assert.match(html, /已完整展开 3 门 AI 教程 · 共 45 节/);
   assert.doesNotMatch(html, /世界模型|三次认知转换|实践验证/);
@@ -111,6 +135,20 @@ test("renders the machine learning course and a lesson", async () => {
   assert.equal(courseResponse.status, 200);
   assert.match(courseHtml, /垃圾邮件过滤器怎样从标记记录中改进/);
   assert.match(courseHtml, /没有标准答案时怎样从行动结果学习/);
+  const machineLessonLinks = [
+    ...new Set(
+      Array.from(
+        courseHtml.matchAll(
+          /href="(\/courses\/ai\/machine-learning\/[^"#?]+)"/g,
+        ),
+        (match) => match[1],
+      ),
+    ),
+  ];
+  assert.equal(machineLessonLinks.length, 16);
+  for (const lessonPath of machineLessonLinks) {
+    assert.equal((await render(lessonPath)).status, 200, lessonPath);
+  }
 
   const lessonResponse = await render(
     "/courses/ai/machine-learning/01-spam-filter",
@@ -130,22 +168,87 @@ test("renders the machine learning course and a lesson", async () => {
   assert.match(finalLessonHtml, /继续学习深度学习/);
 });
 
-test("renders the AI course map with three complete tutorials", async () => {
+test("renders the course catalog and all five discipline outlines", async () => {
+  const catalogResponse = await render("/courses");
+  const catalogHtml = await catalogResponse.text();
+
+  assert.equal(catalogResponse.status, 200);
+  assert.match(catalogHtml, /COURSE CATALOG · 5 FIELDS/);
+  assert.match(catalogHtml, /18 门入门课程/);
+
+  const disciplineSpecs = [
+    ["ai", "AI", 4],
+    ["finance", "金融", 4],
+    ["art", "艺术", 4],
+    ["humanities", "人文", 3],
+    ["language", "语言", 3],
+  ];
+
+  for (const [slug, title, courseCount] of disciplineSpecs) {
+    assert.match(catalogHtml, new RegExp(`href="/courses/${slug}"`));
+
+    const response = await render(`/courses/${slug}`);
+    const html = await response.text();
+    assert.equal(response.status, 200);
+    assert.match(html, new RegExp(title));
+    assert.match(html, new RegExp(`${courseCount}(?:<!-- -->)? 门课程`));
+
+    const courseLinks = Array.from(
+      html.matchAll(new RegExp(`href="(/courses/${slug}/[^"#?]+)"`, "g")),
+      (match) => match[1],
+    );
+    assert.equal(new Set(courseLinks).size, courseCount);
+  }
+});
+
+test("renders the AI course map with three complete tutorials and one outline", async () => {
   const response = await render("/courses/ai");
   const html = await response.text();
 
   assert.equal(response.status, 200);
-  assert.match(html, /四个问题，逐层深入/);
   assert.match(html, /href="\/courses\/ai\/machine-learning"/);
   assert.match(html, /href="\/courses\/ai\/deep-learning"/);
   assert.match(html, /href="\/courses\/ai\/large-language-models"/);
+  assert.match(html, /href="\/courses\/ai\/ai-agents"/);
   assert.match(html, /大语言模型/);
   assert.match(html, /词元/);
   assert.doesNotMatch(html, /\bToken\b/);
   assert.match(html, /AI Agent/);
-  assert.match(html, /3 COMPLETE \/ 4 TOTAL/);
+  assert.match(html, /4(?:<!-- -->)? 门课程/);
   assert.match(html, /完整教程/);
-  assert.match(html, /大纲就绪/);
+  assert.match(html, /章节大纲/);
+});
+
+test("renders every outline course and every chapter outline", async () => {
+  for (const [discipline, course, lessonCount] of outlineCourseSpecs) {
+    const coursePath = `/courses/${discipline}/${course}`;
+    const response = await render(coursePath);
+    const html = await response.text();
+
+    assert.equal(response.status, 200, coursePath);
+    assert.match(html, /章节大纲/, coursePath);
+    assert.match(html, /课程章节/, coursePath);
+    assert.match(html, /完成标志/, coursePath);
+
+    const lessonLinks = Array.from(
+      html.matchAll(
+        new RegExp(`href="(${coursePath}/lesson-[0-9]{2})"`, "g"),
+        (match) => match[1],
+      ),
+    );
+    assert.equal(new Set(lessonLinks).size, lessonCount, coursePath);
+
+    for (let lessonNumber = 1; lessonNumber <= lessonCount; lessonNumber += 1) {
+      const lessonPath = `${coursePath}/lesson-${String(lessonNumber).padStart(2, "0")}`;
+      const lessonResponse = await render(lessonPath);
+      const lessonHtml = await lessonResponse.text();
+
+      assert.equal(lessonResponse.status, 200, lessonPath);
+      assert.match(lessonHtml, /章节大纲/, lessonPath);
+      assert.match(lessonHtml, /关键概念/, lessonPath);
+      assert.match(lessonHtml, /完成标志/, lessonPath);
+    }
+  }
 });
 
 test("renders the deep learning course and its first, middle, and last lessons", async () => {
@@ -155,6 +258,20 @@ test("renders the deep learning course and its first, middle, and last lessons",
   assert.match(courseHtml, /建立表示链/);
   assert.match(courseHtml, /同一只猫换个位置/);
   assert.match(courseHtml, /什么时候复用已有模型/);
+  const deepLessonLinks = [
+    ...new Set(
+      Array.from(
+        courseHtml.matchAll(
+          /href="(\/courses\/ai\/deep-learning\/[^"#?]+)"/g,
+        ),
+        (match) => match[1],
+      ),
+    ),
+  ];
+  assert.equal(deepLessonLinks.length, 14);
+  for (const lessonPath of deepLessonLinks) {
+    assert.equal((await render(lessonPath)).status, 200, lessonPath);
+  }
 
   const lessonPaths = [
     "/courses/ai/deep-learning/01-pattern-after-moving",
@@ -197,6 +314,13 @@ test("renders the large language model course and its first, middle, and last le
   );
   const uniqueLessonLinks = [...new Set(lessonLinks)];
   assert.equal(uniqueLessonLinks.length, 15);
+  for (const lessonPath of uniqueLessonLinks) {
+    assert.equal(
+      (await render(lessonPath)).status,
+      200,
+      lessonPath,
+    );
+  }
 
   const lessonPaths = [
     "/courses/ai/large-language-models/01-autocomplete-loop",

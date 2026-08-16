@@ -6,7 +6,6 @@ export type Discipline = {
   model: string;
   courses: string[];
   accent: string;
-  active?: boolean;
 };
 
 export const disciplines: Discipline[] = [
@@ -19,7 +18,6 @@ export const disciplines: Discipline[] = [
       "机器学习从样本和反馈中调整模型，深度学习进一步自动提取表示。大语言模型与 Agent 再把预测连接到语言、工具和行动。",
     courses: ["机器学习", "深度学习", "大语言模型", "AI Agent"],
     accent: "sage",
-    active: true,
   },
   {
     slug: "finance",

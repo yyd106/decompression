@@ -8,7 +8,7 @@ export function SiteFooter() {
         </div>
         <div className="footer-links">
           <a href="/#why">学习主张</a>
-          <a href="/#fields">五个板块</a>
+          <a href="/courses">五个领域</a>
           <a href="/courses/ai">AI 课程</a>
         </div>
         <p className="footer-year">AI 时代的学习实验 · 2026</p>

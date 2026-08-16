@@ -263,24 +263,22 @@ export default function Home() {
                     ))}
                   </ul>
                   <div className="discipline-status">
-                    {discipline.active ? "进入 3 门已展开课程" : "入门大纲已就绪"}
-                    {discipline.active && <ArrowIcon />}
+                    {discipline.slug === "ai"
+                      ? "进入 4 门课程 · 3 门已展开"
+                      : `查看 ${discipline.courses.length} 门课程大纲`}
+                    <ArrowIcon />
                   </div>
                 </article>
               );
 
-              return discipline.active ? (
+              return (
                 <a
                   className="discipline-link"
-                  href="/courses/ai"
+                  href={`/courses/${discipline.slug}`}
                   key={discipline.slug}
                 >
                   {card}
                 </a>
-              ) : (
-                <div className="discipline-link" key={discipline.slug}>
-                  {card}
-                </div>
               );
             })}
           </div>
