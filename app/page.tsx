@@ -132,7 +132,7 @@ export default function Home() {
               <span>{stat.label}</span>
             </div>
           ))}
-          <p>目前已完整展开：机器学习与深度学习 · 共 30 节。</p>
+          <p>目前已完整展开 3 门 AI 教程 · 共 45 节。</p>
         </div>
       </section>
 
@@ -263,7 +263,7 @@ export default function Home() {
                     ))}
                   </ul>
                   <div className="discipline-status">
-                    {discipline.active ? "进入 2 门已展开课程" : "入门大纲已就绪"}
+                    {discipline.active ? "进入 3 门已展开课程" : "入门大纲已就绪"}
                     {discipline.active && <ArrowIcon />}
                   </div>
                 </article>

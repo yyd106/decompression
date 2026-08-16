@@ -30,11 +30,12 @@ const aiCourses = [
   {
     index: "03",
     title: "大语言模型",
-    question: "预测下一个词，怎样逐步扩展成生成、检索和工具使用？",
+    question: "预测下一个词元，怎样连续生成回答，并进一步接入检索与工具？",
     description:
-      "课程将从语言概率进入 Token、表示、注意力、预训练、对齐、检索与工具调用，并明确语言流畅与事实可靠之间的边界。",
+      "从自动续写进入词元、上下文、注意力、预训练与生成控制，再比较提示、对齐、事实核验、检索和工具调用。",
     lessons: "15 节",
-    status: "大纲就绪",
+    href: "/courses/ai/large-language-models",
+    status: "完整教程",
   },
   {
     index: "04",
@@ -59,7 +60,7 @@ export default function AiCourseHubPage() {
           </nav>
           <div className="ai-hub-hero-grid">
             <div>
-              <p className="eyebrow">COURSE PATH · 4 COURSES</p>
+              <p className="eyebrow">COURSE PATH · 3 COMPLETE / 4 TOTAL</p>
               <h1>AI</h1>
               <p className="ai-hub-lead">
                 先看机器怎样从案例中形成规则，再进入多层网络怎样学习表示；之后才讨论语言模型如何生成，以及 Agent 如何把模型连接到工具与行动。

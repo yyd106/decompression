@@ -100,7 +100,7 @@ test("renders the finished knowledge decompression homepage", async () => {
   assert.match(html, /语言/);
   assert.match(html, /href="\/courses\/ai"/);
   assert.match(html, /href="\/courses\/ai\/machine-learning"/);
-  assert.match(html, /机器学习与深度学习 · 共 30 节/);
+  assert.match(html, /已完整展开 3 门 AI 教程 · 共 45 节/);
   assert.doesNotMatch(html, /世界模型|三次认知转换|实践验证/);
   assert.doesNotMatch(html, /codex-preview|Building your site|react-loading-skeleton/i);
 });
@@ -130,7 +130,7 @@ test("renders the machine learning course and a lesson", async () => {
   assert.match(finalLessonHtml, /继续学习深度学习/);
 });
 
-test("renders the AI course map with two complete tutorials", async () => {
+test("renders the AI course map with three complete tutorials", async () => {
   const response = await render("/courses/ai");
   const html = await response.text();
 
@@ -138,8 +138,12 @@ test("renders the AI course map with two complete tutorials", async () => {
   assert.match(html, /四个问题，逐层深入/);
   assert.match(html, /href="\/courses\/ai\/machine-learning"/);
   assert.match(html, /href="\/courses\/ai\/deep-learning"/);
+  assert.match(html, /href="\/courses\/ai\/large-language-models"/);
   assert.match(html, /大语言模型/);
+  assert.match(html, /词元/);
+  assert.doesNotMatch(html, /\bToken\b/);
   assert.match(html, /AI Agent/);
+  assert.match(html, /3 COMPLETE \/ 4 TOTAL/);
   assert.match(html, /完整教程/);
   assert.match(html, /大纲就绪/);
 });
@@ -166,4 +170,50 @@ test("renders the deep learning course and its first, middle, and last lessons",
     assert.match(lessonHtml, /轮到你判断/);
     assert.match(lessonHtml, /本节词汇/);
   }
+
+  const finalLessonResponse = await render(
+    "/courses/ai/deep-learning/14-transfer-learning",
+  );
+  const finalLessonHtml = await finalLessonResponse.text();
+  assert.equal(finalLessonResponse.status, 200);
+  assert.match(finalLessonHtml, /href="\/courses\/ai\/large-language-models"/);
+  assert.match(finalLessonHtml, /继续学习大语言模型/);
+});
+
+test("renders the large language model course and its first, middle, and last lessons", async () => {
+  const courseResponse = await render("/courses/ai/large-language-models");
+  const courseHtml = await courseResponse.text();
+  assert.equal(courseResponse.status, 200);
+  assert.match(courseHtml, /建立生成循环/);
+  assert.match(courseHtml, /看见概率怎样形成/);
+  assert.match(courseHtml, /改变行为并连接外部世界/);
+  assert.match(courseHtml, /大语言模型/);
+
+  const lessonLinks = Array.from(
+    courseHtml.matchAll(
+      /href="(\/courses\/ai\/large-language-models\/[^"#?]+)"/g,
+    ),
+    (match) => match[1],
+  );
+  const uniqueLessonLinks = [...new Set(lessonLinks)];
+  assert.equal(uniqueLessonLinks.length, 15);
+
+  const lessonPaths = [
+    "/courses/ai/large-language-models/01-autocomplete-loop",
+    "/courses/ai/large-language-models/08-transformer-layers",
+    "/courses/ai/large-language-models/15-tools-and-agents",
+  ];
+
+  for (const lessonPath of lessonPaths) {
+    const lessonResponse = await render(lessonPath);
+    const lessonHtml = await lessonResponse.text();
+    assert.equal(lessonResponse.status, 200);
+    assert.match(lessonHtml, /跟着案例走一遍/);
+    assert.match(lessonHtml, /轮到你判断/);
+    assert.match(lessonHtml, /本节词汇/);
+  }
+
+  const finalLessonHtml = await (await render(lessonPaths[2])).text();
+  assert.match(finalLessonHtml, /href="\/courses\/ai"/);
+  assert.match(finalLessonHtml, /返回 AI 课程地图/);
 });

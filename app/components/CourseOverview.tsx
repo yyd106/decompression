@@ -38,7 +38,9 @@ export function CourseOverview({
           <div className="course-hero-grid">
             <div>
               <p className="eyebrow">{course.eyebrow}</p>
-              <h1>{course.title}</h1>
+              <h1 className={course.title.length >= 5 ? "course-title-long" : undefined}>
+                {course.title}
+              </h1>
               <p className="course-question">{course.question}</p>
             </div>
             <div className="course-summary">

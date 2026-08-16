@@ -940,6 +940,11 @@ svg {
   line-height: 0.95;
 }
 
+.course-hero h1.course-title-long {
+  font-size: clamp(58px, 8vw, 108px);
+  line-height: 1;
+}
+
 .course-question {
   max-width: 700px;
   margin: 42px 0 0;
@@ -2101,6 +2106,11 @@ svg {
 
   .course-hero h1 {
     font-size: 76px;
+  }
+
+  .course-hero h1.course-title-long {
+    font-size: clamp(48px, 15vw, 62px);
+    white-space: nowrap;
   }
 
   .course-question {
