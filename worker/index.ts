@@ -7,10 +7,10 @@ import {
 import handler from "vinext/server/app-router-entry";
 
 interface Env {
-  ASSETS: Fetcher;
-  DB: D1Database;
+  ASSETS?: Fetcher;
+  DB?: D1Database;
   SITE_PASSWORD?: string;
-  IMAGES: {
+  IMAGES?: {
     input(stream: ReadableStream): {
       transform(options: Record<string, unknown>): {
         output(options: {
@@ -30,6 +30,12 @@ interface ExecutionContext {
 const ACCESS_COOKIE = "knowledge_decompression_access";
 const ACCESS_MAX_AGE = 60 * 60 * 24 * 30;
 const PUBLIC_ASSET = /\.(?:css|js|mjs|png|jpe?g|webp|svg|ico|woff2?|ttf|map)$/i;
+
+function readSitePassword(env?: Env) {
+  if (env?.SITE_PASSWORD) return env.SITE_PASSWORD;
+  if (typeof process !== "undefined") return process.env.SITE_PASSWORD;
+  return undefined;
+}
 
 function readCookie(request: Request, name: string): string | undefined {
   const cookieHeader = request.headers.get("cookie");
@@ -184,9 +190,13 @@ async function handleUnlock(request: Request, url: URL, password: string) {
 }
 
 const worker = {
-  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  async fetch(
+    request: Request,
+    env?: Env,
+    ctx?: ExecutionContext,
+  ): Promise<Response> {
     const url = new URL(request.url);
-    const password = env.SITE_PASSWORD;
+    const password = readSitePassword(env);
 
     if (!password) {
       return new Response("Site access is temporarily unavailable.", {
@@ -213,15 +223,19 @@ const worker = {
       return passwordPage(url, returnTo);
     }
 
-    if (url.pathname === "/_vinext/image") {
+    const assets = env?.ASSETS;
+    const images = env?.IMAGES;
+
+    if (url.pathname === "/_vinext/image" && assets && images) {
       const allowedWidths = [...DEFAULT_DEVICE_SIZES, ...DEFAULT_IMAGE_SIZES];
       return handleImageOptimization(
         request,
         {
           fetchAsset: (path) =>
-            env.ASSETS.fetch(new Request(new URL(path, request.url))),
+            assets.fetch(new Request(new URL(path, request.url))),
           transformImage: async (body, { width, format, quality }) => {
-            const result = await env.IMAGES.input(body)
+            const result = await images
+              .input(body)
               .transform(width > 0 ? { width } : {})
               .output({ format, quality });
             return result.response();

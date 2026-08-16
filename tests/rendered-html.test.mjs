@@ -40,7 +40,11 @@ async function render(pathname = "/", options = {}) {
   const worker = await workerPromise;
   const unlocked = options.unlocked ?? true;
   const headers = new Headers({ accept: "text/html" });
-  if (unlocked) headers.set("cookie", await accessCookie());
+  if (options.cookie) {
+    headers.set("cookie", options.cookie);
+  } else if (unlocked) {
+    headers.set("cookie", await accessCookie());
+  }
   if (options.body) {
     headers.set("content-type", "application/x-www-form-urlencoded");
   }
@@ -52,18 +56,72 @@ async function render(pathname = "/", options = {}) {
       body: options.body,
       redirect: "manual",
     }),
-    {
-      SITE_PASSWORD: testPassword,
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
+    options.node
+      ? undefined
+      : {
+          SITE_PASSWORD: testPassword,
+          ASSETS: {
+            fetch: async () => new Response("Not found", { status: 404 }),
+          },
+        },
     {
       waitUntil() {},
       passThroughOnException() {},
     },
   );
 }
+
+test("supports password access when the Node server provides no Worker env", async () => {
+  const previousPassword = process.env.SITE_PASSWORD;
+  process.env.SITE_PASSWORD = testPassword;
+
+  try {
+    const coursePath = "/courses/ai/machine-learning";
+    const gateResponse = await render(coursePath, {
+      node: true,
+      unlocked: false,
+    });
+    const gateHtml = await gateResponse.text();
+
+    assert.equal(gateResponse.status, 200);
+    assert.match(gateHtml, /输入密码/);
+
+    const unlockResponse = await render("/unlock", {
+      node: true,
+      unlocked: false,
+      method: "POST",
+      body: new URLSearchParams({
+        password: testPassword,
+        return_to: coursePath,
+      }),
+    });
+
+    assert.equal(unlockResponse.status, 303);
+    assert.equal(
+      unlockResponse.headers.get("location"),
+      `http://localhost${coursePath}`,
+    );
+
+    const cookie = unlockResponse.headers.get("set-cookie")?.split(";", 1)[0];
+    assert.ok(cookie);
+
+    const courseResponse = await render(coursePath, {
+      node: true,
+      unlocked: false,
+      cookie,
+    });
+    const courseHtml = await courseResponse.text();
+
+    assert.equal(courseResponse.status, 200);
+    assert.match(courseHtml, /机器学习/);
+  } finally {
+    if (previousPassword === undefined) {
+      delete process.env.SITE_PASSWORD;
+    } else {
+      process.env.SITE_PASSWORD = previousPassword;
+    }
+  }
+});
 
 test("shows a password gate without requiring sign-in", async () => {
   const response = await render("/", { unlocked: false });
