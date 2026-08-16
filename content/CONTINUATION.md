@@ -94,8 +94,8 @@ AI Agent 只有同时满足以下条件才算完整教程：
 ## 最近一次交接
 
 - 日期：2026-08-16
-- 已完成：建立跨新聊天的稳定项目契约和可变续写状态；修复 Railway Node 运行时无法读取 `SITE_PASSWORD` 的问题，并保留 Cloudflare Worker 兼容；尚未开始 AI Agent 正文。
-- 本次验证：人工核对 5 个领域、18 门课程、265 章，以及 45 + 220 = 265；`npm run lint` 与 `npm test` 通过。另以 `npm start` 按 Node 生产方式启动站点，实际验证密码页返回 200、解锁返回 303、授权后的机器学习课程页返回 200。
+- 已完成：建立跨新聊天的稳定项目契约和可变续写状态；修复 Railway Node 运行时无法读取 `SITE_PASSWORD` 的问题，并让 Vinext 正确识别 Railway 代理前的 HTTPS 协议；保留 Cloudflare Worker 兼容；尚未开始 AI Agent 正文。
+- 本次验证：人工核对 5 个领域、18 门课程、265 章，以及 45 + 220 = 265；`npm run lint` 与 `npm test` 通过。另以 `npm start` 按 Node 生产方式启动站点，实际验证密码页返回 200、解锁返回 303、授权后的机器学习课程页返回 200；模拟 Railway 的 `X-Forwarded-Proto: https` 后，解锁响应会直接跳转到 HTTPS，并为授权 Cookie 添加 `Secure`。
 - 未决问题：批次 0 尚未执行，因此 AI Agent 的公理句、最小模型和可迁移规律还没有定稿。
 - 下一步：读取上面列出的源文件，调用 `anthropic-skills:dean-distill` 完成批次 0；通过归格与生成器测试后，再写第 01–04 课。
 

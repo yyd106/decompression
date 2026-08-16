@@ -38,7 +38,7 @@ Railway 使用仓库根目录构建，并需要 Node.js 22.13 或更高版本：
 - 启动命令：`npm start`
 - 环境变量：`SITE_PASSWORD`
 
-服务会读取 Railway 提供的 `PORT` 并监听所有网络接口。Cloudflare Worker 部署仍从绑定读取密码；Railway 的 Node 运行环境则从进程环境变量读取同名密码。
+服务会读取 Railway 提供的 `PORT` 并监听所有网络接口。启动命令同时信任 Railway 代理提供的原始协议，因此解锁后会直接跳回 HTTPS，并设置只通过 HTTPS 发送的授权 Cookie。Cloudflare Worker 部署仍从绑定读取密码；Railway 的 Node 运行环境则从进程环境变量读取同名密码。
 
 ## 验证
 
